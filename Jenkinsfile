@@ -17,14 +17,19 @@ pipeline {
         }
 
         
-        
-stage('Check Docker') {
-    steps {
-        bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" --version'
-        bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" info'
-    }
-}
+        stage('Check Docker') {
+            steps {
+                bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" --version'
+                bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" info'
+            }
+        }
 
+        
+        stage('Build Docker Image') {
+            steps {
+                bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" build -t placementpro:latest .'
+            }
+        }
 
 
         stage('Install Dependencies') {
