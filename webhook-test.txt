@@ -1,0 +1,1 @@
+Testing automatic Jenkins builds for PlacementPro
