@@ -1,4 +1,4 @@
-
+groovy
 pipeline {
     agent any
 
@@ -23,9 +23,9 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
+        stage('Run Tests and Coverage') {
             steps {
-                bat 'python -m pytest -v --html=pytest-report.html --self-contained-html'
+                bat 'python -m pytest -v --html=pytest-report.html --self-contained-html --cov --cov-report=term-missing --cov-report=html:coverage-html'
             }
         }
     }
@@ -40,10 +40,21 @@ pipeline {
                 alwaysLinkToLastBuild: true,
                 allowMissing: true
             ])
+
+            publishHTML(target: [
+                reportDir: 'coverage-html',
+                reportFiles: 'index.html',
+                reportName: 'PlacementPro Coverage Report',
+                keepAll: true,
+                alwaysLinkToLastBuild: true,
+                allowMissing: true
+            ])
         }
+
         success {
             echo 'PlacementPro pipeline completed successfully!'
         }
+
         failure {
             echo 'PlacementPro pipeline failed. Check the console output.'
         }
