@@ -16,6 +16,15 @@ pipeline {
             }
         }
 
+        
+        stage('Check Docker') {
+            steps {
+                bat 'docker --version'
+                bat 'docker info'
+            }
+        }
+
+
         stage('Install Dependencies') {
             steps {
                 bat 'python -m pip install -r requirements.txt'
