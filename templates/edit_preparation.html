@@ -1,0 +1,45 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-container">
+    <section class="welcome-card">
+        <h1>Edit Preparation Topic</h1>
+
+        <form method="POST">
+            <input type="hidden" name="csrf_token"
+                   value="{{ csrf_token() }}">
+
+            <label for="topic">Topic</label>
+            <input type="text" id="topic" name="topic"
+                   value="{{ topic['topic'] }}" required>
+
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+                {% for option in ["Aptitude", "Coding", "Technical", "HR Interview"] %}
+                    <option value="{{ option }}"
+                        {% if topic["category"] == option %}selected{% endif %}>
+                        {{ option }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label for="status">Status</label>
+            <select id="status" name="status" required>
+                {% for option in ["Not Started", "In Progress", "Completed"] %}
+                    <option value="{{ option }}"
+                        {% if topic["status"] == option %}selected{% endif %}>
+                        {{ option }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes">{{ topic["notes"] }}</textarea>
+
+            <button type="submit">Save Changes</button>
+            <a href="{{ url_for('preparation') }}">Cancel</a>
+        </form>
+    </section>
+</div>
+{% endblock %}

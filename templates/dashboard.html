@@ -1,0 +1,200 @@
+
+{% extends "base.html" %}
+
+{% block title %}Dashboard | PlacementPro{% endblock %}
+
+{% block content %}
+<div class="page-container">
+
+    <!-- Dashboard Heading -->
+    <section class="dashboard-heading">
+        <h1>Your placement dashboard</h1>
+        <p>Welcome, {{ name }}! Let's prepare for your career.</p>
+    </section>
+
+    <!-- Summary Statistics -->
+    <section class="cards">
+
+        <div class="card">
+            <p>Applications</p>
+            <h2>{{ application_count }}</h2>
+        </div>
+
+        <div class="card">
+            <p>Interviews</p>
+            <h2>{{ interview_count }}</h2>
+        </div>
+
+        <div class="card">
+            <p>Offers</p>
+            <h2>{{ offer_count }}</h2>
+        </div>
+
+        <div class="card">
+            <p>Preparation progress</p>
+            <h2>{{ preparation_percentage }}%</h2>
+        </div>
+
+    </section>
+
+    <!-- Two-Column Dashboard -->
+    <div class="dashboard-columns">
+
+        <!-- Upcoming Interviews -->
+        <section class="welcome-card">
+            <div class="section-heading">
+                <h2>Upcoming interviews</h2>
+                <a href="{{ url_for('interviews') }}">View all</a>
+            </div>
+
+            {% if upcoming_interviews %}
+                {% for interview in upcoming_interviews %}
+                    <div class="upcoming-interview">
+
+                        <h3>
+                            {{ interview["company"] }}
+                            — {{ interview["role"] }}
+                        </h3>
+
+                        <p>
+                            <strong>Round:</strong>
+                            {{ interview["interview_round"] }}
+                        </p>
+
+                        <p>
+                            <strong>Date:</strong>
+                            {{ interview["interview_date"] }}
+                            at {{ interview["interview_time"] }}
+                        </p>
+
+                        <p>
+                            <strong>Mode:</strong>
+                            {{ interview["mode"] }}
+                        </p>
+
+                    </div>
+                {% endfor %}
+
+                <p class="section-footer">
+                    <a href="{{ url_for('interviews') }}">
+                        View all interviews →
+                    </a>
+                </p>
+
+            {% else %}
+                <p>No upcoming interviews scheduled.</p>
+                <p>
+                    <a href="{{ url_for('interviews') }}">
+                        Schedule an interview →
+                    </a>
+                </p>
+            {% endif %}
+        </section>
+
+        <!-- Preparation Progress -->
+        <section class="welcome-card">
+            <div class="section-heading">
+                <h2>Preparation Progress</h2>
+            </div>
+
+            <!-- Preparation Statistics -->
+            <div class="preparation-stats">
+
+                <div class="preparation-stat">
+                    <h3>{{ preparation_count }}</h3>
+                    <p>Total Topics</p>
+                </div>
+
+                <div class="preparation-stat completed-stat">
+                    <h3>{{ completed_count }}</h3>
+                    <p>Completed</p>
+                </div>
+
+                <div class="preparation-stat progress-stat">
+                    <h3>{{ in_progress_count }}</h3>
+                    <p>In Progress</p>
+                </div>
+
+            </div>
+
+            <!-- Overall Progress -->
+            <div class="overall-progress">
+                <p>
+                    <strong>{{ preparation_percentage }}%</strong>
+                    of your preparation topics completed
+                </p>
+
+                <div class="progress-track">
+                    <div
+                        class="progress-fill"
+                        style="width: {{ preparation_percentage }}%;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category-wise Progress -->
+            <h3 class="category-title">Progress by Category</h3>
+
+            {% if category_progress %}
+                {% for category in category_progress %}
+
+                    {% set category_percentage =
+                        (category["completed"] * 100 / category["total"])
+                        | round | int
+                    %}
+
+                    <div class="category-progress">
+
+                        <div class="category-heading">
+                            <span>{{ category["category"] }}</span>
+
+                            <span>
+                                {{ category["completed"] }}/{{ category["total"] }}
+                                completed ({{ category_percentage }}%)
+                            </span>
+                        </div>
+
+                        <div class="progress-track">
+                            <div
+                                class="progress-fill"
+                                style="width: {{ category_percentage }}%;">
+                            </div>
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+            {% else %}
+                <p>
+                    No preparation topics yet. Add topics to track your progress.
+                </p>
+            {% endif %}
+
+            <a class="preparation-link"
+               href="{{ url_for('preparation') }}">
+                Manage Preparation Topics →
+            </a>
+
+        </section>
+
+    </div>
+
+    <!-- Welcome Section -->
+    <section class="welcome-card journey-card">
+        <h2>Your journey starts here!</h2>
+        <p>
+            Keep learning, track your applications, prepare for interviews,
+            and work toward your dream job.
+        </p>
+
+        <p>
+            <a href="{{ url_for('applications') }}">Manage Applications</a>
+            &nbsp; | &nbsp;
+            <a href="{{ url_for('interviews') }}">Manage Interviews</a>
+            &nbsp; | &nbsp;
+            <a href="{{ url_for('preparation') }}">Continue Preparation</a>
+        </p>
+    </section>
+
+</div>
+{% endblock %}

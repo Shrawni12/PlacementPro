@@ -1,0 +1,82 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-container">
+    <h1>Placement Preparation Tracker</h1>
+    <p>Track your learning and interview preparation progress.</p>
+
+    <section class="welcome-card">
+        <h2>Add a Preparation Topic</h2>
+
+        <form method="POST">
+            <input type="hidden" name="csrf_token"
+                   value="{{ csrf_token() }}">
+
+            <label for="topic">Topic</label>
+            <input type="text" id="topic" name="topic"
+                   placeholder="e.g. Python functions"
+                   required>
+
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+                <option value="">Select a category</option>
+                <option value="Aptitude">Aptitude</option>
+                <option value="Coding">Coding</option>
+                <option value="Technical">Technical</option>
+                <option value="HR Interview">HR Interview</option>
+            </select>
+
+            <label for="status">Status</label>
+            <select id="status" name="status" required>
+                <option value="Not Started">Not Started</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+            </select>
+
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes"
+                      placeholder="What do you need to practise?"></textarea>
+
+            <button type="submit">Add Topic</button>
+        </form>
+    </section>
+
+    <section class="welcome-card">
+        <h2>Your Preparation Topics</h2>
+
+        {% if topics %}
+            {% for item in topics %}
+                <div class="upcoming-interview">
+                    <h3>{{ item["topic"] }}</h3>
+                    <p><strong>Category:</strong> {{ item["category"] }}</p>
+                    <p><strong>Status:</strong> {{ item["status"] }}</p>
+
+                    {% if item["notes"] %}
+                        <p><strong>Notes:</strong> {{ item["notes"] }}</p>
+                    {% endif %}
+
+                    
+                    <a href="{{ url_for('edit_preparation', topic_id=item['id']) }}">
+    Edit
+                    </a>
+
+                    <form method="POST"
+                        action="{{ url_for('delete_preparation', topic_id=item['id']) }}"
+                        style="display: inline;">
+                        <input type="hidden" name="csrf_token"
+                            value="{{ csrf_token() }}">
+                            <button type="submit"
+                                onclick="return confirm('Delete this preparation topic?')">
+                                Delete
+                            </button>
+                    </form>
+
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No preparation topics yet. Add your first topic above.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}
