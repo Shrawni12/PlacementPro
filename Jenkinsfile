@@ -31,6 +31,15 @@ pipeline {
             }
         }
 
+        
+        stage('Deploy Application') {
+            steps {
+                bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" stop placementpro-app || exit /b 0'
+                bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" rm -f placementpro-app'
+                bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" run -d --name placementpro-app -p 5000:5000 -e SECRET_KEY=placementpro-local-dev-key -v "D:\\shrawni\\placementpro:/app" placementpro:latest'
+            }
+        }
+
 
         stage('Install Dependencies') {
             steps {
